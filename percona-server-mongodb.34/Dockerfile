@@ -3,28 +3,28 @@ MAINTAINER Percona Development Team <opensource-dev@percona.com>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
                 apt-transport-https ca-certificates \
-                pwgen \
+                pwgen wget \
         && rm -rf /var/lib/apt/lists/*
+RUN wget https://repo.percona.com/apt/percona-release_0.1-4.jessie_all.deb
+RUN dpkg -i percona-release_0.1-4.jessie_all.deb
 
-RUN apt-key adv --keyserver keys.gnupg.net --recv-keys 8507EFA5
 
 RUN echo 'deb https://repo.percona.com/apt jessie testing' > /etc/apt/sources.list.d/percona.list
 
 # the numeric UID is needed for OpenShift
-RUN useradd -u 1001 -r -g 0 -s /sbin/nologin \
+RUN groupadd -r mongodb && useradd -r -g mongodb -s /sbin/nologin \
             -c "Default Application User" mongodb
 
 ENV PERCONA_MAJOR 34
-ENV PERCONA_VERSION 3.4.0-1.0beta.jessie
 
 
 RUN \
         apt-get update \
         && apt-get install -y --force-yes \
-           percona-server-mongodb-$PERCONA_MAJOR=$PERCONA_VERSION \
+           percona-server-mongodb-$PERCONA_MAJOR \
         && rm -rf /var/lib/apt/lists/* \
         && rm -rf /data/db && mkdir -p /data/db \ 
-        && chown -R 1001:0 /data/db
+        && chown -R mongodb:mongodb /data/db
 
 VOLUME ["/data/db"]
 
@@ -34,8 +34,6 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 
 EXPOSE 27017
-
-USER 1001
 
 CMD ["mongod"]
 
