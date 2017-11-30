@@ -1,0 +1,4 @@
+---
+__percona_mongo_pkg_url: https://repo.percona.com/apt
+__percona_mongo_version: percona-release_0.1-4.jessie_all.deb
+__percona_major_version: 34

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - apt: "name={{ item }} state=installed"
+      with_items:
+        - wget
+        - curl
+        - apt-transport-https
+  
+  roles:
+    - ansible-role-percona-mongo

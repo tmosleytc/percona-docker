@@ -1,0 +1,62 @@
+---
+- name: Ensure dependencies are installed.
+  apt:
+    name:
+      - wget
+      - ca-certificates
+      - pwgen
+      - apt-transport-https
+    state: installed
+
+- name: Download specific Percona version
+  get_url:
+    url: "{{ percona_mongo_pkg_url }}/{{ percona_mongo_version }}"
+    dest: "/tmp/{{ percona_mongo_version }}"
+  when: percona_mongo_version is defined
+
+- name: Check if we downloaded a specific version of percona release
+  stat:
+    path: "/tmp/{{ percona_mongo_version }}"
+  register: specific_version
+  when: percona_mongo_version is defined
+
+- name: Install our specific version of percona release
+  apt:
+    deb: "/tmp/{{ percona_mongo_version }}"
+    state: installed
+  when: percona_mongo_version is defined
+
+- name: Install Percona for Mongo
+  apt:
+    name: percona-server-mongodb-34
+    install_recommends: yes
+    update_cache: yes
+    force: yes
+    state: present
+  when: percona_mongo_version is defined
+
+- name: Ensure Percona for Mongo is installed
+  package:
+    name: percona-server-mongodb-34
+    state: present
+
+- name: Create groups
+  group:
+    name: mongodb
+    state: present
+
+- name: Create user
+  user:
+    name: mongodb
+    groups: mongodb
+    shell: /sbin/nologin
+    append: yes
+    comment: "Default Application User"
+    state: present
+  become: false
+
+- name: Create data db folders
+  file:
+    path: /data/db
+    state: directory
+    mode: 0775

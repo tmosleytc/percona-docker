@@ -1,0 +1,22 @@
+# Variable setup.
+- name: Include OS-Specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Define Percona Mongodb Url
+  set_fact:
+    percona_mongo_pkg_url: "{{ __percona_mongo_pkg_url }}"
+  when: percona_mongo_pkg_url is not defined
+
+- name: Define Percona release version
+  set_fact:
+    percona_mongo_version: "{{ __percona_mongo_version }}"
+  when: percona_mongo_version is not defined
+
+- name: Define Percona major version
+  set_fact:
+    percona_major_version: "{{ __percona_major_version }}"
+  when: percona_major_version is not defined
+
+# Setup/install tasks.
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
