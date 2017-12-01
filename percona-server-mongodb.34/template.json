@@ -2,12 +2,22 @@
     "builders":[{
         "type": "docker",
         "image": "debian:jessie",
-        "commit": "true"
+        "commit": "true",
+        "changes":[
+            "VOLUME [\"/data/db\"]",
+            "EXPOSE 27017",
+            "CMD [\"mongod\"]"
+        ]
     }],
     "provisioners": [
         {
             "type":"shell",
             "script": "scripts/ansible.sh"
+        },
+        {
+            "type":"file",
+            "source": "scripts/ps-entry.sh",
+            "destination": "/entrypoint.sh"
         },
         {
             "type":"ansible-local",

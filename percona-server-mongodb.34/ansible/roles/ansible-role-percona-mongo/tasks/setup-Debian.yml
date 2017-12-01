@@ -49,7 +49,7 @@
   user:
     name: mongodb
     groups: mongodb
-    shell: /sbin/nologin
+    shell: /usr/sbin/nologin
     append: yes
     comment: "Default Application User"
     state: present
