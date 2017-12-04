@@ -5,6 +5,7 @@
         "commit": "true",
         "changes":[
             "VOLUME [\"/data/db\"]",
+            "ENTRYPOINT [\"/entrypoint.sh\"]",
             "EXPOSE 27017",
             "CMD [\"mongod\"]"
         ]

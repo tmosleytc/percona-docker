@@ -7,9 +7,10 @@ pip uninstall -y pip setuptools
 rm -rf /usr/local/bin/ansible*
 apt-get -y remove --purge python-pip python-dev python-setuptools libssl-dev libffi-dev
 
-# Clean up tmp
-# rm -rf /tmp/*
-
 # Apt cleanup.
 apt-get -y autoremove
 apt-get update
+
+# Clean up tmp
+rm -rf /tmp/*
+rm -rf /var/lib/apt/lists/*
