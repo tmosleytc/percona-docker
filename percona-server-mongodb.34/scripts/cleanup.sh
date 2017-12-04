@@ -11,6 +11,7 @@ apt-get -y remove --purge python-pip python-dev python-setuptools libssl-dev lib
 apt-get -y autoremove
 apt-get update
 
-# Clean up tmp
+# Clean up temp files
+rm -rf ~/.ansible
 rm -rf /tmp/*
 rm -rf /var/lib/apt/lists/*
